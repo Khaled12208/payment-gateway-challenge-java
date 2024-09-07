@@ -1,0 +1,169 @@
+openapi: 3.0.1
+info:
+  title: Payment Gateway API
+  description: "Responsible for validating requests, storing card information and\
+    \ forwarding payment requests and accepting payment responses to and from the\
+    \ acquiring bank."
+  version: 1.0.0
+servers:
+- url: http://localhost:9090
+  description: Generated server url
+tags:
+- name: Payments Service
+  description: "Responsible for validating requests, storing card information and\
+    \ forwarding payment requests and accepting payment responses to and from the\
+    \ acquiring bank."
+paths:
+  /v1/payment/submitpayment:
+    post:
+      tags:
+      - Payments Service
+      summary: process a payment request
+      operationId: submitPayment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+        required: true
+      responses:
+        "202":
+          description: payment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/payment/{paymentId}:
+    get:
+      tags:
+      - Payments Service
+      summary: retrieve a payment request
+      operationId: getPaymentDetailsByPaymentID
+      parameters:
+      - name: paymentId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: get payment details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    PaymentRequest:
+      required:
+      - amount
+      - card_number
+      - currency
+      - cvv
+      - expiry_date
+      type: object
+      properties:
+        card_number:
+          maxLength: 19
+          minLength: 14
+          pattern: \d+
+          type: string
+          description: "The card number, between 14 and 19 digits."
+          example: "4111111111111111"
+        expiry_date:
+          pattern: "(0[1-9]|1[0-2])/\\d{4}"
+          type: string
+          description: The expiry date of the card in MM/YYYY format.
+          example: 03/2024
+        currency:
+          maxLength: 3
+          minLength: 3
+          pattern: "[A-Z]{3}"
+          type: string
+          description: The currency code (ISO 4217).
+          example: USD
+        amount:
+          minimum: 1
+          type: integer
+          description: "The amount in minor currency units (e.g., cents)."
+          format: int32
+          example: 1050
+        cvv:
+          maximum: 4
+          minimum: 3
+          type: integer
+          description: The CVV of the card.
+          format: int32
+          example: 123
+    PaymentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the payment
+          example: 12345abcde
+        status:
+          type: string
+          description: Status of the payment
+          example: Authorized
+          enum:
+          - Authorized
+          - Declined
+          - Rejected
+        card_number:
+          type: string
+          description: last 4 digits of the card number
+          example: "1234"
+        expiry_date:
+          type: string
+          description: The expiry date of the card in MM/YYYY format.
+          example: 03/2024
+        currency:
+          type: string
+          description: The currency code (ISO 4217).
+          example: USD
+        amount:
+          type: integer
+          description: "The amount in minor currency units (e.g., cents)."
+          format: int32
+          example: 1050
+      description: Response status
+    ErrorResponse:
+      type: object
+      properties:
+        error_message:
+          type: string
+          description: A human-readable message describing the error.
+          example: Invalid payment request
+        timestamp:
+          type: string
+          description: The timestamp when the error occurred.
+          format: date-time
+        trace_id:
+          type: string
+          description: A unique identifier for tracking the request across systems.
+          example: abc123xyz789
