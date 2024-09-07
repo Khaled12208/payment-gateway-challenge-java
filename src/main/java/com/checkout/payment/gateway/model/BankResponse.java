@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "Response status")
-public class BankStatusResponse {
+public class BankResponse {
 
   @JsonProperty("authorization_code")
   @Schema(description = "Unique identifier for the payment", example = "12345abcde")

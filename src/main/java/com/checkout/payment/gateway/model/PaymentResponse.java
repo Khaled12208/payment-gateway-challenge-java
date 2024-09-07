@@ -4,25 +4,25 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import org.springframework.stereotype.Component;
 
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Schema(description = "Response status")
-public class PaymentStatusResponse {
+@Component
+public class PaymentResponse {
 
   @JsonProperty("id")
-  @Schema(description = "Unique identifier for the payment", example = "12345abcde")
+  @Schema(description = "Unique identifier for the payment", example = "1234CD-1344AS-34A55-12344D")
   private String paymentID;
 
   @JsonProperty("status")
   @Schema(description = "Status of the payment", example = "Authorized")
-  private String status;
+  private PaymentStatus status;
 
-  @JsonProperty("last_four_card_digits")
-  @Schema(description = "last 4 digits of the card number", example = "1234")
+  @JsonProperty("card_number")
+  @Schema(description = "last 4 digits of the card number", example = "**********543")
   private String lastFourCardDigits;
 
   @JsonProperty("expiry_date")

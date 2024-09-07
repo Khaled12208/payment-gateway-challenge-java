@@ -12,3 +12,14 @@ services:
       - type: bind
         source: ./imposters
         target: /imposters
+  mockServer:
+    image: mockserver/mockserver:mockserver-snapshot
+    ports:
+      - 1080:1080
+    environment:
+      MOCKSERVER_PROPERTY_FILE: /config/mockserver.properties
+      MOCKSERVER_INITIALIZATION_JSON_PATH: /config/initializerJson.json
+    volumes:
+      - type: bind
+        source: .
+        target: /config

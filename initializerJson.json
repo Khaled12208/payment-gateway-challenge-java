@@ -1,0 +1,95 @@
+[
+  {
+    "httpRequest": {
+      "path": "/payments",
+      "method": "POST",
+      "body": {
+        "card_number": "4111111111111111",
+        "expiry_date": "12/2024",
+        "currency": "USD",
+        "amount": 5000,
+        "cvv": 123
+      }
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "authorized": true,
+        "authorization_code": "123e4567-e89b-12d3-a456-426614174000"
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "path": "/payments",
+      "method": "POST",
+      "body": {
+        "card_number": "5500000000000004",
+        "expiry_date": "06/2025",
+        "currency": "EUR",
+        "amount": 10000,
+        "cvv": 456
+      }
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "authorized": false,
+        "authorization_code": ""
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "path": "/payments",
+      "method": "POST",
+      "body": {
+        "card_number": "2222405343248877",
+        "expiry_date": "04/2025",
+        "currency": "GBP",
+        "amount": 2000,
+        "cvv": 789
+      }
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "authorized": true,
+        "authorization_code": "234e5678-f89c-23d4-b567-536715235000"
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "path": "/payments",
+      "method": "POST",
+      "body": {
+        "card_number": "1234567890123456",
+        "expiry_date": "11/2023",
+        "currency": "JPY",
+        "amount": 1500,
+        "cvv": 321
+      }
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "authorized": false,
+        "authorization_code": ""
+      }
+    }
+  }
+
+]
